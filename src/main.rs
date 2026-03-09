@@ -1,3 +1,12 @@
+struct ProviderWithModels {
+    name: String,
+    models: Vec<String>
+}
+
+impl ProviderWithModels {
+    fn format_models (&self) {
+    }
+}
 fn main() {
     let name = String::from("John Doe"); // memory allocation
     let name2 = name.clone(); // need to clone
@@ -24,15 +33,31 @@ fn main() {
         println!("At while loop: {}", items[idx]);
         idx += 1;
     }
-    
+
     let name = String::from("John Doe");
     assign(&name);
-    
+
     if name == "John Doe" {};
-    
+
     let result = String::from("Result 1");
     let modified_result = modify_result(result);
     println!("Modified result: {}", modified_result);
+
+
+    let providers: Vec<String> = vec![String::from("openai"), String::from("anthropic"), String::from("google")];
+
+    let openai = String::from("openai");
+
+    let models = vec![String::from("gpt-5"), String::from("gpt-4"), String::from("gpt-3")];
+
+    let attached_result = attach_models(&openai, &providers, &models);
+    if Option::is_some(&attached_result) {
+        let attached_result = attached_result.unwrap();
+        println!("Attached result: {:?}", attached_result.models);
+    } else {
+        println!("Could not attach models");
+    }
+
 }
 
 fn print_message(value: &char) -> &char {
@@ -48,4 +73,19 @@ fn assign(value: &String) {
 fn modify_result(mut value: String) -> String {
     let value = value + " [MODIFIED]";
     return value;
+}
+
+fn attach_models(provider: &String, providers: &[String], models: &[String]) -> Option<ProviderWithModels> {
+    if providers.contains(&provider) == false {
+        println!("Provider does not exist.");
+        return None;
+    }
+
+    let result = ProviderWithModels {
+        name: provider.clone(),
+        models: models.to_vec()
+    };
+
+    Some(result)
+
 }
